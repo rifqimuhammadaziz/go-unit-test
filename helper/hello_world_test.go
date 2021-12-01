@@ -71,3 +71,106 @@ func TestMain(m *testing.M) {
 	// after (ex. exit app, etc)
 	fmt.Println("AFTER UNIT TESTING")
 }
+
+func TestSubTest(t *testing.T) {
+	// test case 1
+	t.Run("Rifqi", func(t *testing.T) {
+		result := HelloWorld("Rifqi")
+		require.Equal(t, "Hello Rifqi", result, "Result must be Hello Rifqi")
+	})
+
+	// test case 2
+	t.Run("Aziz", func(t *testing.T) {
+		result := HelloWorld("Aziz")
+		require.Equal(t, "Hello Aziz", result, "Result must be Hello Aziz")
+	})
+}
+
+func TestTableHelloWorld(t *testing.T) {
+	tests := []struct {
+		name     string
+		request  string
+		expected string
+	}{
+		{
+			name:     "Rifqi",
+			request:  "Rifqi",
+			expected: "Hello Rifqi",
+		},
+		{
+			name:     "Bagas",
+			request:  "Bagas",
+			expected: "Hello Bagas",
+		},
+		{
+			name:     "Kurnia",
+			request:  "Kurnia",
+			expected: "Hello Kurnia",
+		},
+		{
+			name:     "Bayu",
+			request:  "Bayu",
+			expected: "Hello Bayu",
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			result := HelloWorld(test.request)
+			require.Equal(t, test.expected, result)
+		})
+	}
+}
+
+func BenchmarkHelloWorld(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		HelloWorld("Rifqi")
+	}
+}
+
+func BenchmarkHelloWorldXenosty(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		HelloWorld("Xenosty")
+	}
+}
+
+func BenchmarkSubHelloWorld(b *testing.B) {
+	b.Run("Rifqi", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			HelloWorld("Rifqi")
+		}
+	})
+	b.Run("Xenosty", func(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			HelloWorld("Xenosty")
+		}
+	})
+}
+
+func BenchmarkTableHelloWorld(b *testing.B) {
+	benchmarksTable := []struct {
+		name    string
+		request string
+	}{
+		{
+			name:    "Rifqi",
+			request: "Rifqi",
+		},
+		{
+			name:    "Xenosty",
+			request: "Xenosty",
+		},
+		{
+			name:    "RifqiMuhammadAziz",
+			request: "Rifqi Muhammad Aziz",
+		},
+	}
+
+	for _, benchmark := range benchmarksTable {
+		b.Run(benchmark.name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				HelloWorld(benchmark.request)
+			}
+		})
+	}
+}
